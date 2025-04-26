@@ -43,7 +43,7 @@ Shader "Custom/CS_Shader"
 
             struct Varyings
             {
-                float4 positionHCS : SV_Position;
+                float4 positionHCS : SV_POSITION;
                 float4 color : COLOR;
                 float size : PSIZE;
             };

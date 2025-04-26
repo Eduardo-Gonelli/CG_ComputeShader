@@ -2,37 +2,37 @@ using UnityEngine;
 
 public class CS_Script : MonoBehaviour
 {
-    Vector2 mousePos;  // posição do mouse na tela
+    Vector2 cursorPos;  // posicaoo do mouse na tela
 
-    // estrutura para armazenar os dados da partícula
+    // estrutura para armazenar os dados da particula
     struct Particle
     {
         public Vector3 position;
         public Vector3 velocity;
         public float lifetime;
     }
-    // separa 7 floats para cada partícula (3 para posição, 3 para velocidade e 1 para tempo de vida)
+    // separa 7 floats para cada particula (3 para posicao, 3 para velocidade e 1 para tempo de vida)
     const int SIZE_PARTICLE = 7 * sizeof(float); 
 
-    public int particleCount = 1000000; // sim, são 1 milhão de partículas
+    public int particleCount = 1000000; // sim, e 1 milhao de particulas
     public Material particleMaterial;   // material associado ao shader
     public ComputeShader cs;            // associado ao arquivo compute shader
 
     int kernelID;  // id do kernel
-    ComputeBuffer particleBuffer;  // buffer para armazenar as partículas
+    ComputeBuffer particleBuffer;  // buffer para armazenar as particulas
 
-    int groupSizeX; // número de grupos em X
+    int groupSizeX; // numero de grupos em X
 
-    RenderParams rp;  // parâmetros de renderização
+    RenderParams rp;  // parametros de renderizacao
 
-    // inicializa cada partícula
+    // inicializa cada particula
     void Start()
     {
         Particle[] particles = new Particle[particleCount];
 
         for(int i = 0; i < particleCount; i++)
         {
-            // cria uma posição aleatória para cada partícula
+            // cria uma posicao aleatoria para cada particula
             Vector3 p = new Vector3();
             p.x = Random.value * 2 - 1; // valor entre -1 e 1
             p.y = Random.value * 2 - 1;
@@ -40,17 +40,17 @@ public class CS_Script : MonoBehaviour
             p.Normalize(); // normaliza o vetor
             p *= Random.value * 5; // multiplica por um valor entre 0 e 5
 
-            // seta a posição da partícula
+            // seta a posicao da particula
             particles[i].position = p;
 
-            // zera a velocidade da partícula
+            // zera a velocidade da particula
             particles[i].velocity = Vector3.zero;
 
-            // seta o tempo de vida da partícula
+            // seta o tempo de vida da particula
             particles[i].lifetime = Random.value * 5 + 1.0f; // valor entre 1 e 6
         }
 
-        // cria o buffer para armazenar as partículas
+        // cria o buffer para armazenar as particulas
         particleBuffer = new ComputeBuffer(particleCount, SIZE_PARTICLE);
         // copia os dados para o buffer
         particleBuffer.SetData(particles);
@@ -58,18 +58,18 @@ public class CS_Script : MonoBehaviour
         kernelID = cs.FindKernel("CSParticle");
 
         uint threadsX;
-        // localiza o número de threads em X
+        // localiza o numero de threads em X
         cs.GetKernelThreadGroupSizes(kernelID, out threadsX, out _, out _);
-        // número de grupos em X
+        // numero de grupos em X
         groupSizeX = Mathf.CeilToInt((float)particleCount / (float)threadsX);
 
         // vincula o compute buffer ao shader e o compute shader
         cs.SetBuffer(kernelID, "particleBuffer", particleBuffer);
         particleMaterial.SetBuffer("particleBuffer", particleBuffer);
 
-        // cria os parâmetros de renderização
+        // cria os parametros de renderizacao
         rp = new RenderParams(particleMaterial);
-        // cria um bounds de 10km em cada direção
+        // cria um bounds de 10km em cada direcao
         rp.worldBounds = new Bounds(Vector3.zero, 10000* Vector3.one); 
     }
 
@@ -85,15 +85,15 @@ public class CS_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float[] mousePosition2D = { mousePos.x, mousePos.y };
+        float[] mousePosition2D = { cursorPos.x, cursorPos.y };
         
         // Envia os dados ao compute shader
         cs.SetFloat("deltaTime", Time.deltaTime);
         cs.SetFloats("mousePosition", mousePosition2D);
 
-        // Atualiza as partículas
+        // Atualiza as particulas
         cs.Dispatch(kernelID, groupSizeX, 1, 1);
-        // renderiza as partículas
+        // renderiza as particulas
         Graphics.RenderPrimitives(rp, MeshTopology.Points, 1, particleCount);
     }
 
@@ -102,14 +102,14 @@ public class CS_Script : MonoBehaviour
         Vector3 point = new Vector3();
         Camera cam = Camera.main;
         Event ev = Event.current;
-        Vector2 mPos = new Vector2();
+        Vector2 mousePos = new Vector2();
         
-        mPos.x = ev.mousePosition.x;        
-        mPos.y = cam.pixelHeight - ev.mousePosition.y;
-        // converte a posição do mouse para o espaço do mundo
-        point = cam.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, cam.nearClipPlane));
-        // atualiza a posição do mouse
-        mousePos.x = point.x;
-        mousePos.y = point.y;
+        mousePos.x = ev.mousePosition.x;        
+        mousePos.y = cam.pixelHeight - ev.mousePosition.y;
+        // converte a posicao do mouse para o espaco do mundo
+        point = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.nearClipPlane));
+        // atualiza a posicao do mouse
+        cursorPos.x = point.x;
+        cursorPos.y = point.y;
     }
 }
