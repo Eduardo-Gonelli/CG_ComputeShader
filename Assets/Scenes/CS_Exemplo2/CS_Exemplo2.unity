@@ -275,7 +275,7 @@ MonoBehaviour:
   boidMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   boidMaterial: {fileID: 2100000, guid: 6083b6c7e3ae45348bfc6c5dd59a7326, type: 2}
   target: {fileID: 816642442}
-  boidsCount: 50000
+  boidsCount: 5000
   rotationSpeed: 5
   boidSpeed: 10
   nbDistance: 10
