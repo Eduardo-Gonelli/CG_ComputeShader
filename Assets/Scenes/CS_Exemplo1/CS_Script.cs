@@ -47,10 +47,11 @@ public class CS_Script : MonoBehaviour
             particles[i].velocity = Vector3.zero;
 
             // seta o tempo de vida da particula
-            particles[i].lifetime = Random.value * 5 + 1.0f; // valor entre 1 e 6
+            particles[i].lifetime = Random.value * 5.0f + 1.0f; // valor entre 1 e 6
         }
 
         // cria o buffer para armazenar as particulas
+        // o buffer e criado com o tamanho da estrutura Particle e o numero de particulas
         particleBuffer = new ComputeBuffer(particleCount, SIZE_PARTICLE);
         // copia os dados para o buffer
         particleBuffer.SetData(particles);
@@ -63,7 +64,7 @@ public class CS_Script : MonoBehaviour
         // numero de grupos em X
         groupSizeX = Mathf.CeilToInt((float)particleCount / (float)threadsX);
 
-        // vincula o compute buffer ao shader e o compute shader
+        // vincula o compute buffer ao shader e ao compute shader
         cs.SetBuffer(kernelID, "particleBuffer", particleBuffer);
         particleMaterial.SetBuffer("particleBuffer", particleBuffer);
 
