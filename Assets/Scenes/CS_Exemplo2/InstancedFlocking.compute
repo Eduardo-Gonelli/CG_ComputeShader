@@ -1,4 +1,5 @@
 ﻿#pragma kernel CSMain
+#define GROUP_SIZE 256
 
 struct Boid
 {
@@ -18,9 +19,9 @@ float3 flockPosition;
 float neighbourDistance;
 int boidsCount;
 
-[numthreads(256,1,1)]
+[numthreads(GROUP_SIZE,1,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
-{
+{	
 	Boid boid = boidsBuffer[id.x];
 
 	float3 separation = 0;
