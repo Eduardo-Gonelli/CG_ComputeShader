@@ -94,7 +94,7 @@ public class InstancedFlocking : MonoBehaviour
     {
         cs.SetFloat("time", Time.time);
         cs.SetFloat("deltaTime", Time.deltaTime);
-
+        cs.SetVector("flockPosition", target.transform.position);
         cs.Dispatch(kernelHandle, groupSizeX, 1, 1);
 
         Graphics.RenderMeshIndirect(rp, boidMesh, argsBuffer);
