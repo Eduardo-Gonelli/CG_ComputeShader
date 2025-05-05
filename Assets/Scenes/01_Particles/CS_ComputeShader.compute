@@ -33,16 +33,17 @@ uint rand_xorshift()
 void respawn(uint id)
 {
     rng_state = id;
+    // 2^32 = 4294967296, que e o valor maximo de um inteiro sem sinal de 32 bits
     float tmp = (1.0 / 4294967296.0);
     float f0 = float(rand_xorshift()) * tmp - 0.5;
     float f1 = float(rand_xorshift()) * tmp - 0.5;
-	//float f2 = float(rand_xorshift()) * tmp - 0.5;
+	//a particula vai ser criada em uma posicao aleatoria em torno do mouse
+    // o valor 0.8f e o tamanho do raio em torno do mouse
     float3 normalF3 = normalize(float3(f0, f1, 0.0)) * 0.8f;
     normalF3 *= float(rand_xorshift()) * tmp;
     particleBuffer[id].position = float3(normalF3.x + mousePosition.x, normalF3.y + mousePosition.y, 0.0);
-	// reseta o lifetime da particula
-    particleBuffer[id].lifetime = 4;
-    particleBuffer[id].velocity = float3(0, 0, 0);
+    particleBuffer[id].lifetime = 4; // reseta o lifetime da particula
+    particleBuffer[id].velocity = float3(0, 0, 0); // reseta a velocidade da particula
 }
 
 [numthreads(256, 1, 1)]
@@ -51,15 +52,15 @@ void CSParticle(uint3 id : SV_DispatchThreadID)
     Particle particle = particleBuffer[id.x];
     // subtrai o lifetime da particula baseado no deltaTime
     particle.lifetime -= deltaTime;
-
+    // captura o vetor de direcao entre a particula e o mouse
     float3 delta = float3(mousePosition.xy, 0) - particle.position;
-    float3 dir = normalize(delta);
-
+    float3 dir = normalize(delta); // normaliza a direcao
+    // aumenta a velocidade da particula baseado no deltaTime
     particle.velocity += dir;
     particle.position += particle.velocity * deltaTime;
-
+    // atualiza a particula no buffer
     particleBuffer[id.x] = particle;
-
+    // se esgotar o lifetime da particula, respawn
     if (particle.lifetime < 0)
         respawn(id.x);
 }

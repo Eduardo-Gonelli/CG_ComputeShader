@@ -86,12 +86,10 @@ public class CS_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float[] mousePosition2D = { cursorPos.x, cursorPos.y };
-        
+        float[] mousePosition2D = { cursorPos.x, cursorPos.y };       
         // Envia os dados ao compute shader
         cs.SetFloat("deltaTime", Time.deltaTime);
         cs.SetFloats("mousePosition", mousePosition2D);
-
         // Atualiza as particulas
         cs.Dispatch(kernelID, groupSizeX, 1, 1);
         // renderiza as particulas
@@ -101,15 +99,16 @@ public class CS_Script : MonoBehaviour
     void OnGUI()
     {
         Vector3 point = new Vector3();
-        Camera cam = Camera.main;
-        Event ev = Event.current;
-        Vector2 mousePos = new Vector2();
-        
-        mousePos.x = ev.mousePosition.x;        
+        Camera cam = Camera.main; // captura a camera principal
+        Event ev = Event.current; // captura o evento atual
+        Vector2 mousePos = new Vector2();  
+        mousePos.x = ev.mousePosition.x; // captura a posicao do mouse em x   
+        // inverte a posicao do mouse em y, o sistema de coordenadas do Unity e diferente do OpenGL
+        // OpenGL tem a origem no canto inferior esquerdo, enquanto na Unity é no canto superior esquerdo 
         mousePos.y = cam.pixelHeight - ev.mousePosition.y;
         // converte a posicao do mouse para o espaco do mundo
         point = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.nearClipPlane));
-        // atualiza a posicao do mouse
+        // atualiza a posicao do mouse em x e y
         cursorPos.x = point.x;
         cursorPos.y = point.y;
     }

@@ -52,12 +52,10 @@ Shader "Custom/CS_Shader"
             {
                 Varyings OUT;
                 Particle particle = particleBuffer[IN.instanceID];
-
                 // Cor
                 float lerpVal = particle.lifetime * 0.25f;
                 OUT.color = half4(1.0f - lerpVal + 0.1, lerpVal + 0.1, 1.0f, lerpVal);
-
-                // Position
+                // Posicao
                 OUT.positionHCS = TransformObjectToHClip(particle.position);
                 OUT.size = _PointSize;
                 return OUT;
