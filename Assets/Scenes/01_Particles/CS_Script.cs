@@ -111,5 +111,5 @@ public class CS_Script : MonoBehaviour
         // atualiza a posicao do mouse em x e y
         cursorPos.x = point.x;
         cursorPos.y = point.y;
-    }
+    } 
 }

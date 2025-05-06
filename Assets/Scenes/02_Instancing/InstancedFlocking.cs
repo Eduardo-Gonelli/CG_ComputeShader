@@ -12,7 +12,7 @@ public class InstancedFlocking : MonoBehaviour
         {
             position = pos;
             direction = dir;
-            noise_offset = offset;
+            noise_offset = offset; 
         }
     }
 
@@ -78,12 +78,9 @@ public class InstancedFlocking : MonoBehaviour
 
         cs.SetFloat("rotationSpeed", rotationSpeed);
         cs.SetFloat("boidSpeed", boidSpeed);
-        cs.SetFloat("boidSpeedVariation", boidSpeedVariation);
+        cs.SetFloat("boidSpeedVariation", boidSpeedVariation);        
         cs.SetFloat("nbDistance", nbDistance);
-        cs.SetFloat("nbDistance", nbDistance);
-        cs.SetInt("boidsCount", numOfBoids);
-        Debug.Log("Boids Count: " + boidsCount);
-        Debug.Log("Number of Boids: " + numOfBoids);
+        cs.SetInt("boidsCount", numOfBoids);        
         cs.SetVector("flockPosition", target.transform.position);
 
         cs.SetBuffer(kernelHandle, "boidsBuffer", boidsBuffer);

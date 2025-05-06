@@ -23,44 +23,30 @@ int boidsCount;
 void CSMain (uint3 id : SV_DispatchThreadID)
 {	
 	Boid boid = boidsBuffer[id.x];
-
 	float3 separation = 0;
 	float3 alignment = 0;
 	float3 cohesion = flockPosition;
-
 	uint nearbyCount = 1; // Add self that is ignored in loop
-
 	for (uint i = 0; i < (uint)boidsCount; i++) {
-		if (i == id.x) continue;
-		
+		if (i == id.x) continue;		
 		Boid tempBoid = boidsBuffer[i];
-
-		float dist = distance(boid.position, tempBoid.position);
-			
+		float dist = distance(boid.position, tempBoid.position);			
 		if (dist < neighbourDistance)
 		{
 			float3 offset = boid.position - tempBoid.position;
 			dist = max(dist, 0.000001);//Avoid division by zero
 			separation += offset * (1.0/dist - 1.0/neighbourDistance);
-
 			alignment += tempBoid.direction;
 			cohesion += tempBoid.position;
-
 			nearbyCount += 1;
 		}
 	}
-
-
 	float avg = 1.0 / nearbyCount;
 	alignment *= avg;
 	cohesion *= avg;
 	cohesion = normalize(cohesion - boid.position);
-
 	float3 direction = alignment + separation + cohesion;
-
 	boid.direction = lerp(normalize(boid.direction), direction,  0.01);
-
 	boid.position += (boid.direction * boidSpeed * deltaTime);
-
 	boidsBuffer[id.x] = boid;
 }
