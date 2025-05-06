@@ -42,7 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -93,8 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 71e5397dfc8004ddf827280c3765ff55,
-    type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 71e5397dfc8004ddf827280c3765ff55, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -460,20 +460,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c0dd0f06da44597bded3844e7eca6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationClip: {fileID: 5685697100008369186, guid: c9fa1272af92446b8a528edc711a7297, type: 3}
   shader: {fileID: 7200000, guid: d2ba949a5a30c428eaf314c936cc45f0, type: 3}
   boidObject: {fileID: 1762089274}
-  animationClip: {fileID: 5685697100008369186, guid: c9fa1272af92446b8a528edc711a7297,
-    type: 3}
-  boidsCount: 2000
-  spawnRadius: 10
+  boidMaterial: {fileID: 2100000, guid: 9c8dda22d292546a8bff3bb693be83e7, type: 2}
   target: {fileID: 1669663790}
+  frameInterpolation: 1
+  spawnRadius: 10
   rotationSpeed: 4
   boidSpeed: 6
   neighbourDistance: 2
   boidSpeedVariation: 0.9
   boidFrameSpeed: 10
-  frameInterpolation: 1
-  boidMaterial: {fileID: 2100000, guid: 9c8dda22d292546a8bff3bb693be83e7, type: 2}
+  boidsCount: 1000
 --- !u!4 &1669663790
 Transform:
   m_ObjectHideFlags: 0
